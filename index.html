@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kavalan - Women & Child Safety</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#d90429">
+</head>
+<body>
+
+  <div class="app-container">
+    <header>
+      <h1>🛡️ காவலன் (Kavalan)</h1>
+      <p id="network-status" class="status-online">🟢 ஆன்லைன் (Online)</p>
+    </header>
+
+    <!-- 1. லாகின் மற்றும் Mode தேர்வுப் பக்கம் -->
+    <section id="auth-section" class="card">
+      <h2>உள்நுழைக (Login / Register)</h2>
+      
+      <div class="mode-selector">
+        <label>
+          <input type="radio" name="userMode" value="child" checked> 👧 குழந்தை (Child Mode)
+        </label>
+        <label>
+          <input type="radio" name="userMode" value="parent"> 👨‍👩‍👧 பெற்றோர் (Parent Mode)
+        </label>
+      </div>
+
+      <input type="tel" id="user-phone" placeholder="உங்கள் மொபைல் எண் (எ.கா: 9876543210)" required>
+      <input type="password" id="user-pin" placeholder="4 இலக்க ரகசிய பின் (PIN)" maxlength="4" required>
+      
+      <button id="login-btn" class="btn-primary">உள்நுழைக (Login)</button>
+      <p id="auth-msg" class="msg-box"></p>
+    </section>
+
+    <!-- 2. குழந்தைக்கான பக்கம் (Child Mode Dashboard) -->
+    <section id="child-section" class="card hidden">
+      <div class="top-bar">
+        <span>👧 Child Mode</span>
+        <button onclick="logout()" class="btn-small">வெளியேறு</button>
+      </div>
+
+      <div id="contacts-setup">
+        <h3>அவசரத் தொடர்பு எண்கள்</h3>
+        <input type="tel" id="mom-phone" placeholder="அம்மா மொபைல் எண்">
+        <input type="tel" id="dad-phone" placeholder="அப்பா மொபைல் எண்">
+        <input type="tel" id="guardian-phone" placeholder="கார்டியன் மொபைல் எண்">
+        <button id="save-contacts-btn" class="btn-secondary">எண்களைச் சேமி</button>
+      </div>
+
+      <div class="sos-container">
+        <p id="gps-status">📍 GPS சரிபார்க்கப்படுகிறது...</p>
+        <button id="sos-btn" class="sos-button">🚨 EMERGENCY SOS</button>
+        <p class="hint">ஆபத்து நேரத்தில் இந்தப் பட்டனை அழுத்தவும்</p>
+      </div>
+
+      <div class="quick-calls">
+        <a href="tel:112" class="call-btn">📞 112 அவசர உதவி</a>
+        <a href="tel:1091" class="call-btn">📞 1091 மகளிர் உதவி</a>
+      </div>
+    </section>
+
+    <!-- 3. பெற்றோருக்கான பக்கம் (Parent Mode Dashboard) -->
+    <section id="parent-section" class="card hidden">
+      <div class="top-bar">
+        <span>👨‍👩‍👧 Parent Mode</span>
+        <button onclick="logout()" class="btn-small">வெளியேறு</button>
+      </div>
+
+      <h3>குழந்தையின் எண்ணை இணைக்கவும்</h3>
+      <div class="link-box">
+        <input type="tel" id="track-child-phone" placeholder="குழந்தையின் மொபைல் எண்">
+        <button id="link-child-btn" class="btn-secondary">கண்காணி (Track)</button>
+      </div>
+
+      <div id="parent-monitor" class="monitor-box">
+        <p id="child-safe-status" class="safe-badge">✅ குழந்தை பாதுகாப்பாக உள்ளார்</p>
+        <div id="emergency-alert-box" class="alert-box hidden">
+          <h2>🚨 அவசர எச்சரிக்கை! 🚨</h2>
+          <p>உங்கள் குழந்தை SOS பட்டனை அழுத்தியுள்ளார்!</p>
+          <a id="live-map-link" href="#" target="_blank" class="btn-map">📍 Live Location மேப்பில் பார்</a>
+          <button id="stop-alarm-btn" class="btn-stop">🔇 அலாரத்தை நிறுத்து</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Firebase SDK (Backend இணைப்பு) -->
+  <script type="module" src="gps-alarm.js"></script>
+  <script type="module" src="app.js"></script>
+  
+  <!-- PWA Service Worker பதிவு -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('PWA Service Worker Active'))
+        .catch(err => console.error('SW Error:', err));
+    }
+  </script>
+</body>
+</html>
